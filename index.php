@@ -133,7 +133,7 @@ require_once 'config/connect.php';
             <form class="form-inline">
             <ul class="nav">
             <li class="nav-item"><label class="my-1 mr-2" for="inlineFormCustomSelectPref">En Stock</label>
-  <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+  <select name="stock" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
     <option selected>All</option>
     <option value="1">Oui</option>
     <option value="2">Non</option>
@@ -193,7 +193,8 @@ require_once 'config/connect.php';
         <div class="container">
   <div class="row">
     <?php 
-        $query = "SELECT * FROM `mugs`";
+        $query = "SELECT * FROM `mugs` WHERE image != ''";
+
         if ($result = $mysqli->query($query)) {
             if ($result->num_rows > 0) {
                 while($row = $result->fetch_assoc()){
