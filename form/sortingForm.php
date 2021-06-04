@@ -18,7 +18,7 @@ if(empty($_POST['stock']) == 'Non') {
                     <br/>
                     Stock: '.$row['qte'].'</p>
 
-                    </div>'
+                    </div>';
                 }
             }
         }
