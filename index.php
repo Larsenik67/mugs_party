@@ -27,6 +27,8 @@
  *  - tu dois exporter la table dans le dossier sql.
  */
 
+require_once 'config/connect.php';
+
  $site_name = 'Mugs Party';
  $couleurs = ['Noir', 'Blanc', 'Violet', 'Marron', 'Rose', 'Vert', 'Jaune'];
 
@@ -81,7 +83,9 @@
                      * Le lien "Ajouter un mug" ci dessous doit être visible et accessible seulement pour les utilisateurs connectés (user).
                      */
                     ?>
+                    <?php if (isset($_SESSION['user'])) : ?>
                     <a href="#" class="btn btn-outline-secondary"><i class="fa fa-plus mr-2"></i>Ajouter un mug</a>
+                    <?php endif; ?>
 
                 </div>
             </div>
@@ -126,7 +130,93 @@
 
         <div id="sorting-bar" class="container-fluid sorting-bar">
             <!-- ton code html, php de la sorting-bar -->
+            <form class="form-inline">
+            <ul class="nav">
+            <li class="nav-item"><label class="my-1 mr-2" for="inlineFormCustomSelectPref">En Stock</label>
+  <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+    <option selected>All</option>
+    <option value="1">Oui</option>
+    <option value="2">Non</option>
+  </select></li>
+  <li class="nav-item"><label class="my-1 mr-2" for="inlineFormCustomSelectPref">Tarif</label>
+  <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+    <option selected>All</option>
+    <option value="1">Supérieur</option>
+    <option value="2">Inférieur</option>
+  </select>à </li>
+  <li class="nav-item"><label class="my-1 mr-2" for="inlineFormInputName2"> </label>
+  <input type="text" class="form-control my-1 mr-sm-2" id="inlineFormInputName2" placeholder=" ">€  
+  </li>
+
+  <li class="nav-item"><label class="my-1 mr-2" for="inlineFormCustomSelectPref">Couleur</label>
+  <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+    <option selected>All</option>
+    <?php 
+    foreach($couleurs as $couleur){
+        echo '<option value="'.$couleur.'">'.$couleur.'</option>';
+    }
+    ?>
+  </select></li>
+  <li class="nav-item"><label class="my-1 mr-2" for="inlineFormCustomSelectPref">Taille</label>
+  <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+    <option selected>All</option>
+
+<?php 
+        $query = "SELECT * FROM `sizes`";
+        if ($result = $mysqli->query($query)) {
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()){
+                    echo '<option value="'.$row['sizes'].'">'.$row['sizes'].'</option>';
+                }
+            }
+        }
+?>
+
+  </select></li>
+  <li class="nav-item"><label class="my-1 mr-2" for="inlineFormCustomSelectPref">Nouveautés</label>
+  <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+    <option selected>All</option>
+    <option value="1">Non</option>
+    <option value="2">Oui</option>
+  </select></li>
+  <li class="nav-item"><label class="my-1 mr-2" for="inlineFormCustomSelectPref">Tendances</label>
+  <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+    <option selected>All</option>
+    <option value="1">Oui</option>
+    <option value="2">Non</option>
+  </select></li><button type="button" class="btn btn-success">Trier</button>
+  <button type="button" class="btn btn-danger">Reset</button>
+  </ul>
+            </form>
         </div>
+
+        <div class="container">
+  <div class="row">
+    <?php 
+        $query = "SELECT * FROM `mugs`";
+        if ($result = $mysqli->query($query)) {
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()){
+                    echo '<div class="col-sm mugs mx-1 my-1">
+                    <img src=images/'.$row['image'].' alt="...">
+                    <br/>
+                    '.$row['title'].'
+                    <br/>
+                    <br/>
+                    <p>'.$row['description'].'
+                    <br/>
+                    <br/>
+                    Prix: '.$row['price'].'
+                    <br/>
+                    Stock: '.$row['qte'].'</p>
+
+                    </div>';
+                }
+            }
+        }
+?>
+  </div>
+</div>
 
         <?php
         /**
